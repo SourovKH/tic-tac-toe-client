@@ -13,8 +13,20 @@ export const JoinPage = ({ setPlayerDetails }) => {
     event.preventDefault();
     if (!username) return setError(true);
 
-    setPlayerDetails({ username });
-    navigate("/lobby");
+    const body = { name: username };
+
+    fetch("http://localhost:3000/game/join", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setPlayerDetails({ username, ...data });
+        navigate("/lobby");
+      });
   };
 
   return (
@@ -27,7 +39,7 @@ export const JoinPage = ({ setPlayerDetails }) => {
         borderRadius: "10px",
         display: "flex",
         flexDirection: "column",
-        alignItems: 'center',
+        alignItems: "center",
         rowGap: "1.5em",
       }}
     >
