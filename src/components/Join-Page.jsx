@@ -7,11 +7,12 @@ export const JoinPage = ({ setPlayerDetails }) => {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
-  const [error, setError] = useState(false);
+  const [error, setError] = useState({ status: false, message: "" });
 
   const handleJoin = (event) => {
     event.preventDefault();
-    if (!username) return setError(true);
+    if (!username)
+      return setError({ status: true, message: "Please enter username" });
 
     const body = { name: username };
 
@@ -22,10 +23,21 @@ export const JoinPage = ({ setPlayerDetails }) => {
       },
       body: JSON.stringify(body),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          return res.json().then((data) => {
+            throw new Error(data.message);
+          });
+        }
+
+        return res.json();
+      })
       .then((data) => {
         setPlayerDetails({ username, ...data });
         navigate("/lobby");
+      })
+      .catch((err) => {
+        setError({ status: true, message: err.message });
       });
   };
 
@@ -44,6 +56,7 @@ export const JoinPage = ({ setPlayerDetails }) => {
       }}
     >
       <div>Join Game</div>
+      <hr style={{width: '100%'}}/>
       <Box
         component="form"
         onSubmit={handleJoin}
@@ -55,7 +68,7 @@ export const JoinPage = ({ setPlayerDetails }) => {
           rowGap: "1.5em",
         }}
       >
-        {!error ? (
+        {!error.status ? (
           <TextField
             id="standard-multiline-flexible"
             label="Username"
@@ -69,7 +82,7 @@ export const JoinPage = ({ setPlayerDetails }) => {
             error
             id="standard-error-helper-text"
             label="Username"
-            helperText="Please Enter username"
+            helperText={error.message}
             onChange={() => setError(false)}
           />
         )}

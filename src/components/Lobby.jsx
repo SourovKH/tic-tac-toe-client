@@ -54,20 +54,20 @@ export const Lobby = ({ playerDetails, setOpponentDetails }) => {
         width: "30em",
         height: "20em",
         border: "1px solid rgb(200, 200, 200)",
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-around'
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-around",
       }}
     >
-      <h1 style={{textAlign: 'center', fontSize: '2em'}}>Players</h1>
+      <h1 style={{ textAlign: "center", fontSize: "2em" }}>Players</h1>
       <PlayerDeck>
         <PlayerCard
           playername={playerDetails.username}
           symbol={playerDetails.symbol}
         />
         <PlayerCard
-        playername={otherPlayer.username}
-        symbol={otherPlayer.symbol}
+          playername={otherPlayer.username}
+          symbol={otherPlayer.symbol}
         ></PlayerCard>
       </PlayerDeck>
     </div>
